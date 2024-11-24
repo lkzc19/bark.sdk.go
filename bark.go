@@ -21,6 +21,12 @@ type Req struct {
 	// 推送图标 错误图标不会显示
 	Icon      string
 	GroupName string
+	// URL 点击跳转
+	URL string
+	// Copy 下拉等出现复制按钮时点击复制[Copy]的值
+	Copy string
+	// AutoCopy 自动复制 iOS14.5之后长按或下拉可触发自动复制，iOS14.5之前无需任何操作即可触发自动复制
+	AutoCopy bool
 }
 
 type _resp struct {
@@ -62,6 +68,15 @@ func Notify(req Req) error {
 	}
 	if req.GroupName != "" {
 		url = fmt.Sprintf("%sgroup=%s&", url, req.GroupName)
+	}
+	if req.URL != "" {
+		url = fmt.Sprintf("%surl=%s&", url, req.URL)
+	}
+	if req.Copy != "" {
+		url = fmt.Sprintf("%scopy=%s&", url, req.Copy)
+	}
+	if req.AutoCopy {
+		url = fmt.Sprintf("%sautoCopy=%o&", url, 1)
 	}
 
 	resp, err := http.Get(url)

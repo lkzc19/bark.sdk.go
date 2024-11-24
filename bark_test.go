@@ -55,3 +55,30 @@ func TestIcon(t *testing.T) {
 		log.Fatal(err)
 	}
 }
+
+func TestURL(t *testing.T) {
+	before()
+
+	req.Title = "URL"
+	req.Content = "TestURL"
+	req.URL = "https://github.com/lkzc19/bark.sdk.go"
+
+	err := Notify(req)
+	if err != nil {
+		log.Fatal(err)
+	}
+}
+
+func TestCopy(t *testing.T) {
+	before()
+
+	req.Title = "Copy"
+	req.Content = "TestCopy"
+	req.Copy = "https://pkg.go.dev/github.com/lkzc19/bark.sdk.go"
+	req.AutoCopy = true
+
+	err := Notify(req)
+	if err != nil {
+		log.Fatal(err)
+	}
+}
