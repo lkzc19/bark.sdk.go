@@ -9,6 +9,14 @@ Bark API 请求简单封装
 
 ## 使用
 
+引入依赖
+
+```bash
+go get -u github.com/lkzc19/bark.sdk.go
+```
+
+使用
+
 ```go
 package main
 
