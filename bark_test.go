@@ -82,3 +82,16 @@ func TestCopy(t *testing.T) {
 		log.Fatal(err)
 	}
 }
+
+func TestBadge(t *testing.T) {
+	before()
+
+	req.Title = "Badge"
+	req.Content = "TestBadge"
+	req.Badge = 42
+
+	err := Notify(req)
+	if err != nil {
+		log.Fatal(err)
+	}
+}

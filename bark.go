@@ -27,6 +27,8 @@ type Req struct {
 	Copy string
 	// AutoCopy 自动复制 iOS14.5之后长按或下拉可触发自动复制，iOS14.5之前无需任何操作即可触发自动复制
 	AutoCopy bool
+	// Badge 角标
+	Badge int
 }
 
 type _resp struct {
@@ -77,6 +79,9 @@ func Notify(req Req) error {
 	}
 	if req.AutoCopy {
 		url = fmt.Sprintf("%sautoCopy=%o&", url, 1)
+	}
+	if req.Badge != 0 {
+		url = fmt.Sprintf("%sbadge=%o&", url, req.Badge)
 	}
 
 	resp, err := http.Get(url)
