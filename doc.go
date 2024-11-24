@@ -9,7 +9,7 @@ Usage:
 
 	func main() {
 		req := bark.Req{
-			DeviceKey: "wKcg9jK8Z8h4JMLJyeCDBc",
+			DeviceKey: "xxx",
 			Title:     "bark.example.go",
 			Content:   "Bark API 请求简单封装测试",
 		}
