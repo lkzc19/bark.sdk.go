@@ -1,4 +1,4 @@
-package bark_sdk
+package bark
 
 import (
 	"github.com/joho/godotenv"
@@ -7,14 +7,14 @@ import (
 	"testing"
 )
 
-var req = BarkReq{}
+var req = Req{}
 
 func before() {
 	var err = godotenv.Load()
 	if err != nil {
 		log.Fatal(err)
 	}
-	req.Token = os.Getenv("BARK_TOKEN")
+	req.DeviceKey = os.Getenv("DeviceKey")
 }
 
 func TestNotify(t *testing.T) {

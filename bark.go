@@ -1,4 +1,4 @@
-package bark_sdk
+package bark
 
 import (
 	"encoding/json"
@@ -8,14 +8,14 @@ import (
 	"net/http"
 )
 
-type BarkReq struct {
-	Token     string
+type Req struct {
+	DeviceKey string
 	Title     string
 	Content   string
 	GroupName string
 }
 
-type barkResp struct {
+type Resp struct {
 	Code      int    `json:"code"`
 	Message   string `json:"message"`
 	Timestamp int64  `json:"timestamp"`
@@ -23,16 +23,22 @@ type barkResp struct {
 
 var baseURL = "https://api.day.app"
 
-func Notify(req BarkReq) error {
-	if req.Token == "" {
-		return errors.New("参数[token]不可为空")
+func Notify(req Req) error {
+	if req.DeviceKey == "" {
+		return errors.New("参数[DeviceKey]不可为空")
 	}
 
-	url := fmt.Sprintf("%s/%s", baseURL, req.Token)
+	if req.Title == "" && req.Content == "" {
+		return errors.New("参数[Title Content]至少需要一个")
+	}
+
+	url := fmt.Sprintf("%s/%s", baseURL, req.DeviceKey)
 	if req.Title != "" {
 		url = fmt.Sprintf("%s/%s", url, req.Title)
 	}
-	url = fmt.Sprintf("%s/%s", url, req.Content)
+	if req.Content != "" {
+		url = fmt.Sprintf("%s/%s", url, req.Content)
+	}
 	if req.GroupName != "" {
 		url = fmt.Sprintf("%s?group=%s", url, req.GroupName)
 	}
@@ -45,7 +51,7 @@ func Notify(req BarkReq) error {
 	defer resp.Body.Close()
 	respBody, err := io.ReadAll(resp.Body)
 	if resp.StatusCode != 200 {
-		barkResp := barkResp{}
+		barkResp := Resp{}
 		err = json.Unmarshal(respBody, &barkResp)
 		if err != nil {
 			return err
