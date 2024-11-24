@@ -15,7 +15,7 @@ type Req struct {
 	GroupName string
 }
 
-type Resp struct {
+type _resp struct {
 	Code      int    `json:"code"`
 	Message   string `json:"message"`
 	Timestamp int64  `json:"timestamp"`
@@ -51,7 +51,7 @@ func Notify(req Req) error {
 	defer resp.Body.Close()
 	respBody, err := io.ReadAll(resp.Body)
 	if resp.StatusCode != 200 {
-		barkResp := Resp{}
+		barkResp := _resp{}
 		err = json.Unmarshal(respBody, &barkResp)
 		if err != nil {
 			return err
