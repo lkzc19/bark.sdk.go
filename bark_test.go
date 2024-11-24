@@ -20,9 +20,35 @@ func before() {
 func TestNotify(t *testing.T) {
 	before()
 
-	req.Title = "标题"
-	req.Content = "内容"
-	req.GroupName = "测试组3"
+	req.Title = "Notify"
+	req.Content = "TestNotify"
+
+	err := Notify(req)
+	if err != nil {
+		log.Fatal(err)
+	}
+}
+
+func TestSound(t *testing.T) {
+	before()
+
+	req.Title = "Sound"
+	req.Content = "TestSound"
+	req.Sound = "paymentsuccess"
+	req.Call = true
+
+	err := Notify(req)
+	if err != nil {
+		log.Fatal(err)
+	}
+}
+
+func TestIcon(t *testing.T) {
+	before()
+
+	req.Title = "Icon"
+	req.Content = "TestIcon"
+	req.Icon = "https://day.app/assets/images/avatar.jpg"
 
 	err := Notify(req)
 	if err != nil {

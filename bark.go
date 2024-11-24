@@ -12,6 +12,14 @@ type Req struct {
 	DeviceKey string
 	Title     string
 	Content   string
+	// Sound 铃声
+	Sound string
+	// Call	持续响铃 持续重复30秒 默认不持续响铃
+	Call bool
+	// NotArchive 是否不保存消息(保存在Bark中) 默认保存
+	NotArchive bool
+	// 推送图标 错误图标不会显示
+	Icon      string
 	GroupName string
 }
 
@@ -39,8 +47,21 @@ func Notify(req Req) error {
 	if req.Content != "" {
 		url = fmt.Sprintf("%s/%s", url, req.Content)
 	}
+	url += "?"
+	if req.Sound != "" {
+		url = fmt.Sprintf("%ssound=%s&", url, req.Sound)
+	}
+	if req.Call {
+		url = fmt.Sprintf("%scall=%o&", url, 1)
+	}
+	if req.NotArchive {
+		url = fmt.Sprintf("%sisArchive=%o&", url, 0)
+	}
+	if req.Icon != "" {
+		url = fmt.Sprintf("%sicon=%s&", url, req.Icon)
+	}
 	if req.GroupName != "" {
-		url = fmt.Sprintf("%s?group=%s", url, req.GroupName)
+		url = fmt.Sprintf("%sgroup=%s&", url, req.GroupName)
 	}
 
 	resp, err := http.Get(url)
