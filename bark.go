@@ -23,6 +23,8 @@ type Req struct {
 	GroupName string
 	// URL 点击跳转
 	URL string
+	// 时效性
+	Level Level
 	// Copy 下拉等出现复制按钮时点击复制[Copy]的值
 	Copy string
 	// AutoCopy 自动复制 iOS14.5之后长按或下拉可触发自动复制，iOS14.5之前无需任何操作即可触发自动复制
@@ -48,6 +50,10 @@ func Notify(req Req) error {
 		return errors.New("参数[Title Content]至少需要一个")
 	}
 
+	if req.Level != "" && req.Level != Active && req.Level != TimeSensitive && req.Level != Passive {
+		return errors.New("参数[Level]错误")
+	}
+
 	url := fmt.Sprintf("%s/%s", baseURL, req.DeviceKey)
 	if req.Title != "" {
 		url = fmt.Sprintf("%s/%s", url, req.Title)
@@ -70,6 +76,9 @@ func Notify(req Req) error {
 	}
 	if req.GroupName != "" {
 		url = fmt.Sprintf("%sgroup=%s&", url, req.GroupName)
+	}
+	if req.Level != "" {
+		url = fmt.Sprintf("%slevel=%s&", url, req.Level)
 	}
 	if req.URL != "" {
 		url = fmt.Sprintf("%surl=%s&", url, req.URL)
@@ -101,3 +110,14 @@ func Notify(req Req) error {
 	}
 	return nil
 }
+
+type Level string
+
+const (
+	// Active 默认值，系统会立即亮屏显示通知
+	Active Level = "active"
+	// TimeSensitive 时效性通知，可在专注状态下显示通知
+	TimeSensitive Level = "timeSensitive"
+	// Passive 仅将通知添加到通知列表，不会亮屏提醒
+	Passive Level = "passive"
+)

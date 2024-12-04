@@ -56,6 +56,19 @@ func TestIcon(t *testing.T) {
 	}
 }
 
+func TestLevel(t *testing.T) {
+	before()
+
+	req.Title = "Level"
+	req.Content = "TestLevel"
+	req.Level = "zxc"
+
+	err := Notify(req)
+	if err != nil {
+		log.Fatal(err)
+	}
+}
+
 func TestURL(t *testing.T) {
 	before()
 
