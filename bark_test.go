@@ -7,7 +7,9 @@ import (
 	"testing"
 )
 
-var req = Req{}
+var req = Req{
+	Debug: true,
+}
 
 func before() {
 	var err = godotenv.Load()
@@ -49,6 +51,20 @@ func TestIcon(t *testing.T) {
 	req.Title = "Icon"
 	req.Content = "TestIcon"
 	req.Icon = "https://day.app/assets/images/avatar.jpg"
+
+	err := Notify(req)
+	if err != nil {
+		log.Fatal(err)
+	}
+}
+
+func TestCritical(t *testing.T) {
+	before()
+
+	req.Title = "Critical"
+	req.Content = "TestCritical"
+	req.Critical = true
+	//*req.Volume = -100
 
 	err := Notify(req)
 	if err != nil {

@@ -18,19 +18,26 @@ type Req struct {
 	Call bool
 	// NotArchive 是否不保存消息(保存在Bark中) 默认保存
 	NotArchive bool
-	// 推送图标 错误图标不会显示
+	// Icon 推送图标 错误图标不会显示
 	Icon      string
 	GroupName string
-	// URL 点击跳转
-	URL string
+
+	// Critical 重要警告 会忽略静音设置和勿扰模式
+	Critical bool
+	// Volume 重要警告的音量 默认为5
+	Volume *int
 	// 时效性
 	Level Level
+	// URL 点击跳转
+	URL string
 	// Copy 下拉等出现复制按钮时点击复制[Copy]的值
 	Copy string
 	// AutoCopy 自动复制 iOS14.5之后长按或下拉可触发自动复制，iOS14.5之前无需任何操作即可触发自动复制
 	AutoCopy bool
 	// Badge 角标
 	Badge int
+
+	Debug bool
 }
 
 type _resp struct {
@@ -77,6 +84,19 @@ func Notify(req Req) error {
 	if req.GroupName != "" {
 		url = fmt.Sprintf("%sgroup=%s&", url, req.GroupName)
 	}
+	if req.Critical {
+		if req.Volume == nil {
+			req.Volume = new(int)
+			*req.Volume = 5
+		}
+		if *req.Volume > 10 {
+			*req.Volume = 10
+		}
+		if *req.Volume < 0 {
+			*req.Volume = 0
+		}
+		url = fmt.Sprintf("%slevel=critical&volume=%o", url, *req.Volume)
+	}
 	if req.Level != "" {
 		url = fmt.Sprintf("%slevel=%s&", url, req.Level)
 	}
@@ -91,6 +111,10 @@ func Notify(req Req) error {
 	}
 	if req.Badge != 0 {
 		url = fmt.Sprintf("%sbadge=%o&", url, req.Badge)
+	}
+
+	if req.Debug {
+		fmt.Println(url)
 	}
 
 	resp, err := http.Get(url)
